@@ -64,3 +64,20 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+Реализовать api c авторизацией
+Api должно выполнять функционал простейшей гостевой книги, запросы:
+- регистрация
+- вход
+- добавление отзыва
+- добавление ответа на отзыв(только для администратора)
+- просмотр пагинированного списка отзывов с ответами
+- добавление нового отзыва должно иницировать push в публичный канал для всех пользователей
+- добавление ответа на отзыв должно инциировать push в приватный канал пользователя оставившего отзыв
+
+Реализовать на стеке
+Laravel + nginx + mysql + websocket
+
+- guestBook.loc/api/login (post)
+- guestBook.loc/api/register (post)
