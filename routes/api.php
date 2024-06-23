@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\ResponseController;
+use App\Http\Controllers\Api\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -19,16 +21,15 @@ use App\Http\Controllers\Api\AuthController;
 //    return $request->user();
 //});
 
+Route::namespace('Api')->group(function () {
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
 
-//Route::group(['namespace' => 'Api'], function () {
-//    Route::post('register', 'AuthController@register');
-//    Route::post('login', 'AuthController@login');
-//    Route::post('logout', 'AuthController@logout')->middleware('auth:api');
-//});
-
-
-
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/reviews', [ReviewController::class, 'index']);
+        Route::post('/reviews', [ReviewController::class, 'store']);
+        Route::post('/reviews/{review}/responses', [ResponseController::class, 'store'])
+            ->middleware('admin');
+    });
+});
 
