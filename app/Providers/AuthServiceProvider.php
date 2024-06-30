@@ -18,11 +18,17 @@ class AuthServiceProvider extends ServiceProvider
         // User::class => UserPolicy::class,
     ];
 
+
     /**
      * Register any authentication / authorization services.
      */
     public function boot()
     {
         $this->registerPolicies();
+        $app = $this->app;
+        if (!$app->routesAreCached()) {
+            Passport::routes();
+        }
+
     }
 }

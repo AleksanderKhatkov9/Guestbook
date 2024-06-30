@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -28,7 +29,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('authToken')->accessToken;
 
-        return response()->json(['message' => 'Registration successful'], 201);
+        return response()->json(['token' => $token], 201);
     }
 
     public function login(Request $request)
@@ -38,12 +39,17 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['error' => 'Invalid credentials'], 401);
+        $credentials = $request->only('email', 'password');
+
+        if (!Auth::attempt($credentials)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
         }
 
-        $user = Auth::user();
+        $user = $request->user();
         $token = $user->createToken('authToken')->accessToken;
+
         return response()->json(['token' => $token], 200);
     }
 

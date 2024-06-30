@@ -24,7 +24,6 @@ class ResponseController extends Controller
             'response' => $request->response,
         ]);
 
-        // Initiate push notification to private channel of the review's author
         return response()->json(['message' => 'Response added successfully'], 201);
     }
 
